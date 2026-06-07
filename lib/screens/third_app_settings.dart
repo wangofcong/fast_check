@@ -53,6 +53,18 @@ class ThirdAppSettingsScreen extends StatelessWidget {
             onSelected: (v) {
               if (v == 'custom') {
                 _showAppEditDialog(context, provider, null);
+              } else {
+                // 预设模板：找到对应预设数据，预填充到编辑弹窗
+                final preset = _presetApps.cast<Map<String, String>?>().firstWhere(
+                  (p) => p?['name'] == v,
+                  orElse: () => null,
+                );
+                if (preset != null) {
+                  _showAppEditDialog(context, provider, null,
+                      presetName: preset['name'],
+                      presetPackage: preset['package'],
+                      presetScheme: preset['scheme']);
+                }
               }
             },
             itemBuilder: (_) => [
@@ -229,14 +241,15 @@ class ThirdAppSettingsScreen extends StatelessWidget {
   }
 
   Future<void> _showAppEditDialog(BuildContext context,
-      SettingsProvider provider, ThirdAppConfig? existing) async {
+      SettingsProvider provider, ThirdAppConfig? existing,
+      {String? presetName, String? presetPackage, String? presetScheme}) async {
     final isEditing = existing != null;
     final nameCtrl =
-        TextEditingController(text: isEditing ? existing.name : '');
+        TextEditingController(text: isEditing ? existing.name : (presetName ?? ''));
     final packageCtrl =
-        TextEditingController(text: isEditing ? existing.packageName ?? '' : '');
+        TextEditingController(text: isEditing ? existing.packageName ?? '' : (presetPackage ?? ''));
     final schemeCtrl =
-        TextEditingController(text: isEditing ? existing.urlScheme ?? '' : '');
+        TextEditingController(text: isEditing ? existing.urlScheme ?? '' : (presetScheme ?? ''));
     final linkCtrl =
         TextEditingController(text: isEditing ? existing.iosUniversalLink ?? '' : '');
 
