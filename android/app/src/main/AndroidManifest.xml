@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <application
-        android:label="fast_check"
+        android:label="打卡提醒"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
