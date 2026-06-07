@@ -3,6 +3,7 @@ import '../l10n/l10n.dart';
 import 'package:provider/provider.dart';
 import '../providers/settings_provider.dart';
 import '../models/third_app_config.dart';
+import '../widgets/app_picker_dialog.dart';
 
 /// 第三方 App 配置页面
 ///
@@ -248,6 +249,27 @@ class ThirdAppSettingsScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // ---- 从已安装 App 选择（仅 Android） ----
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final appInfo = await AppPickerDialog.show(ctx);
+                      if (appInfo != null) {
+                        nameCtrl.text = appInfo.appName;
+                        packageCtrl.text = appInfo.packageName;
+                      }
+                    },
+                    icon: Icon(Icons.phone_android,
+                        color: Theme.of(ctx).colorScheme.primary),
+                    label: Text(L10n.thirdAppChooseInstalled),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
                 TextField(
                   controller: nameCtrl,
                   decoration: InputDecoration(

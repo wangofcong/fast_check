@@ -59,6 +59,9 @@ dependencies:
   # File saving
   file_picker: ^8.1.7+1
 
+  # List installed apps (Android only)
+  device_apps: ^2.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

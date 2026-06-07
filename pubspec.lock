@@ -89,6 +89,14 @@ packages:
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub/"
     source: hosted
     version: "1.2.0"
+  device_apps:
+    dependency: "direct main"
+    description:
+      name: device_apps
+      sha256: e84dc74d55749993fd671148cc0bd53096e1be0c268fc364285511b1d8a4c19b
+      url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub/"
+    source: hosted
+    version: "2.2.0"
   fake_async:
     dependency: transitive
     description:

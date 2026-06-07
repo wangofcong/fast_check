@@ -534,6 +534,13 @@ class L10n {
   static String get thirdAppLaunchTest => tr('测试跳转', 'Test Launch');
   static String get thirdAppPunchInHint => tr('上班打卡页面 URL', 'Punch In URL');
   static String get thirdAppPunchOutHint => tr('下班打卡页面 URL', 'Punch Out URL');
+  static String get thirdAppChooseInstalled => tr('从已安装 App 中选择', 'Choose from installed apps');
+  static String get thirdAppPickerTitle => tr('选择已安装的 App', 'Select Installed App');
+  static String get thirdAppPickerSearchHint => tr('搜索 App 名称或包名...', 'Search app name or package...');
+  static String get thirdAppPickerNoMatch => tr('未找到匹配的应用', 'No matching apps found');
+  static String get thirdAppPickerNoApps => tr('未找到可用的应用', 'No available apps found');
+  static String get thirdAppPickerNotSupported => tr('iOS 不支持列出已安装应用，请手动填写', 'iOS does not support listing installed apps, please enter manually');
+  static String get thirdAppPickerFailed => tr('获取应用列表失败', 'Failed to get app list');
 
   // ==================================================================
   //  数据管理补充 (DataSettingsScreen)
