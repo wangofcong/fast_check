@@ -373,6 +373,15 @@ class L10n {
   static String get locationDefault => tr('默认', 'Default');
 
   // ==================================================================
+  //  地图选点 (MapPickerScreen)
+  // ==================================================================
+  static String get mapPickerTitle => tr('选择地点', 'Pick Location');
+  static String get mapPickerSearchHint => tr('搜索地点名称或地址...', 'Search place name or address...');
+  static String get mapPickerTapHint => tr('点击地图选择位置...', 'Tap on the map to pick a location...');
+  static String get mapPickerPickOnMap => tr('在地图上选择位置', 'Pick on Map');
+  static String get mapPickerSearchFail => tr('搜索失败', 'Search failed');
+
+  // ==================================================================
   //  第三方 App (ThirdAppSettings)
   // ==================================================================
   static String get thirdAppTitle => tr('第三方 App', 'Third-party Apps');

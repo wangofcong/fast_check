@@ -5,6 +5,7 @@ import '../providers/settings_provider.dart';
 import '../models/company_location.dart';
 import '../utils/geofence_validator.dart';
 import '../widgets/geofence_radius_widget.dart';
+import 'map_picker_screen.dart';
 
 /// 公司地点设置页面
 ///
@@ -152,36 +153,18 @@ class LocationSettingsScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: latCtrl,
-                            decoration: InputDecoration(
-                              labelText: L10n.locationLatitude,
-                              hintText: L10n.tr('例如：39.9042', 'e.g. 39.9042'),
-                              border: const OutlineInputBorder(),
-                            ),
-                            keyboardType:
-                                const TextInputType.numberWithOptions(
-                                    decimal: true),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextField(
-                            controller: lngCtrl,
-                            decoration: InputDecoration(
-                              labelText: L10n.locationLongitude,
-                              hintText: L10n.tr('例如：116.4074', 'e.g. 116.4074'),
-                              border: const OutlineInputBorder(),
-                            ),
-                            keyboardType:
-                                const TextInputType.numberWithOptions(
-                                    decimal: true),
-                          ),
-                        ),
-                      ],
+
+                    // ---- 地图选点 / 手动输入经纬度 ----
+                    _buildCoordinateSection(
+                      ctx: ctx,
+                      setState: setState,
+                      nameCtrl: nameCtrl,
+                      addressCtrl: addressCtrl,
+                      latCtrl: latCtrl,
+                      lngCtrl: lngCtrl,
+                      existingLat: existing?.latitude,
+                      existingLng: existing?.longitude,
+                      existingAddress: existing?.address,
                     ),
                     const SizedBox(height: 16),
 
@@ -423,4 +406,98 @@ class _LocationCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// 构建坐标选择区域（地图选点 + 手动输入）
+///
+/// 包含：
+/// - "在地图上选择" 按钮
+/// - 经纬度手动输入框（作为备选/微调）
+Widget _buildCoordinateSection({
+  required BuildContext ctx,
+  required void Function(VoidCallback) setState,
+  required TextEditingController nameCtrl,
+  required TextEditingController addressCtrl,
+  required TextEditingController latCtrl,
+  required TextEditingController lngCtrl,
+  double? existingLat,
+  double? existingLng,
+  String? existingAddress,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      // ---- 地图选点按钮 ----
+      SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: () async {
+            final result = await Navigator.of(ctx).push<Map<String, dynamic>>(
+              MaterialPageRoute(
+                builder: (_) => MapPickerScreen(
+                  initialLatitude: existingLat ?? double.tryParse(latCtrl.text),
+                  initialLongitude: existingLng ?? double.tryParse(lngCtrl.text),
+                  initialAddress: existingAddress ?? addressCtrl.text,
+                ),
+              ),
+            );
+
+            if (result != null) {
+              final lat = result['latitude'] as double;
+              final lng = result['longitude'] as double;
+              final address = result['address'] as String? ?? '';
+
+              setState(() {
+                latCtrl.text = lat.toStringAsFixed(6);
+                lngCtrl.text = lng.toStringAsFixed(6);
+                // 如果用户没有手动输入地址，自动填入反向编码的地址
+                if (addressCtrl.text.trim().isEmpty && address.isNotEmpty) {
+                  addressCtrl.text = address;
+                }
+              });
+            }
+          },
+          icon: const Icon(Icons.map),
+          label: Text(L10n.mapPickerPickOnMap),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+          ),
+        ),
+      ),
+      const SizedBox(height: 8),
+
+      // ---- 手动输入经纬度（备选） ----
+      Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: latCtrl,
+              decoration: InputDecoration(
+                labelText: L10n.locationLatitude,
+                hintText: L10n.tr('例如：39.9042', 'e.g. 39.9042'),
+                border: const OutlineInputBorder(),
+                isDense: true,
+              ),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: TextField(
+              controller: lngCtrl,
+              decoration: InputDecoration(
+                labelText: L10n.locationLongitude,
+                hintText: L10n.tr('例如：116.4074', 'e.g. 116.4074'),
+                border: const OutlineInputBorder(),
+                isDense: true,
+              ),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
 }

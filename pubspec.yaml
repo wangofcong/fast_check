@@ -49,6 +49,10 @@ dependencies:
   # HTTP client for API calls
   http: ^1.3.0
 
+  # Map display (OpenStreetMap, no API key required)
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+
   # Share for exporting data
   share_plus: ^10.1.4
 
